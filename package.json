@@ -1,0 +1,29 @@
+{
+  "name": "agreeable",
+  "version": "1.0.0",
+  "description": "Type friendly agreements between peers for rpc and forms",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanramage/agreeable.git"
+  },
+  "keywords": [
+    "holepunch",
+    "pear",
+    "p2p",
+    "rpc",
+    "forms"
+  ],
+  "author": "Ryan Ramage",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanramage/agreeable/issues"
+  },
+  "homepage": "https://github.com/ryanramage/agreeable#readme",
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}
