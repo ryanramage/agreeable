@@ -1,8 +1,25 @@
 import z from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
-import { promises } from 'bare-fs'
-import { fileURLToPath } from 'bare-url'
-import path from 'bare-path'
+// imports we need that are runtime dependent
+let readFile, fileURLToPath, resolve, dirname, path = null
+
+// hack to work for both node and bare
+// just make it easier for consumers to not have to do import mapping, with so few depends like this
+if (global.Bare) {
+  let { default: path } = await import('bare-path')
+  dirname = path.dirname, resolve = path.resolve
+  let { promises } = await import('bare-fs')
+  readFile = promises.readFile
+  const url = await import('bare-url')
+  fileURLToPath = url.fileURLToPath
+} else {
+  let { default: path } = await import('path')
+  dirname = path.dirname, resolve = path.resolve
+  let { readFile: _readFile} = await import('fs/promises')
+  readFile = _readFile
+  const url = await import('url')
+  fileURLToPath = url.fileURLToPath
+}
 
 const defaultPath = '/_swag.json'
 const defaultAgreementPath = '/_agreement.mjs'
@@ -182,8 +199,8 @@ export const serialize = ({role, version, description, routes}) => {
 
 export const fullPath = (relativePath, moduleUrl) => {
   const __filename = fileURLToPath(moduleUrl)
-  const __dirname = path.dirname(__filename)
-  const location = path.resolve(__dirname, relativePath)
+  const __dirname = dirname(__filename)
+  const location = resolve(__dirname, relativePath)
   return location
 }
 
@@ -196,7 +213,7 @@ export const load = async (location) => {
       const { default: agreement } = await import(location)
       loadedAgreement = agreement
       // open the file and get the contents 
-      mjs = await promises.readFile(location, 'utf-8')
+      mjs = await readFile(location, 'utf-8')
     } catch (e) {
       console.log('could not load agreement', e)
     }
