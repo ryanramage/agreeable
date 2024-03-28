@@ -1,6 +1,6 @@
 {
   "name": "agreeable",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Type friendly agreements between peers for rpc and forms",
   "main": "index.mjs",
   "scripts": {
