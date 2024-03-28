@@ -1,4 +1,11 @@
 import z from 'zod'
+import { zodToJsonSchema } from 'zod-to-json-schema'
+import { promises } from 'bare-fs'
+import { fileURLToPath } from 'bare-url'
+import path from 'bare-path'
+
+const defaultPath = '/_swag.json'
+const defaultAgreementPath = '/_agreement.mjs'
 
 export function params (_param) {
   const info = { 
@@ -151,3 +158,69 @@ export const proxy = z.function().args(
   HeadersSchema
 ).implement(_proxy)
 
+
+// swag methods
+
+export const serialize = ({role, version, description, routes}) => {
+  const _routes = Object.keys(routes).map(name => {
+    const info = routes[name]
+    const param = zodToJsonSchema(info.param, 'form')
+    const paramSchema = param?.definitions?.form
+ 
+    const _returns = zodToJsonSchema(info.return, 'form')
+    const returnSchema = _returns?.definitions?.form
+    
+    const headers = zodToJsonSchema(info.header, 'form')
+    const headerSchema = headers?.definitions?.form
+
+    return { name, paramSchema, headerSchema, returnSchema } 
+    
+  })
+  const api = { role, version, description, routes: _routes }
+  return api 
+}
+
+export const fullPath = (relativePath, moduleUrl) => {
+  const __filename = fileURLToPath(moduleUrl)
+  const __dirname = path.dirname(__filename)
+  const location = path.resolve(__dirname, relativePath)
+  return location
+}
+
+export const load = async (location) => {
+  // todo - location could be an http or other protocol. we could load it from these other sources!
+  let loadedAgreement = location
+  let mjs = null
+  if (typeof location === 'string') {
+    try {
+      const { default: agreement } = await import(location)
+      loadedAgreement = agreement
+      // open the file and get the contents 
+      mjs = await promises.readFile(location, 'utf-8')
+    } catch (e) {
+      console.log('could not load agreement', e)
+    }
+  }
+  const api = serialize(loadedAgreement)
+  return { import: loadedAgreement, api, mjs }
+}
+
+export const loadAgreement = async (location, moduleUrl) => {
+  const _path = fullPath(location, moduleUrl)
+  return await load(_path)
+}
+
+export const addMetaRoutes = (channel, { api, mjs }, jsonPath, agreementPath) => {
+  if (!jsonPath) jsonPath = defaultPath
+  channel.method(jsonPath, () => api)
+  if (mjs) {
+    if (!agreementPath) agreementPath = defaultAgreementPath
+    channel.method(agreementPath, () => mjs) 
+  }
+}
+
+// really the main export the most should be using
+export const enact = (framed, agreement, impl, validator) => {
+  implement(framed, agreement, impl, validator)
+  addMetaRoutes(framed, agreement)
+}

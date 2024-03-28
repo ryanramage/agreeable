@@ -24,6 +24,10 @@
   },
   "homepage": "https://github.com/ryanramage/agreeable#readme",
   "dependencies": {
-    "zod": "^3.22.4"
+    "bare-fs": "^2.2.2",
+    "bare-path": "^2.1.0",
+    "bare-url": "^1.0.11",
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.22.5"
   }
 }
