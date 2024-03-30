@@ -75,7 +75,8 @@ export function params (_param) {
       const returnVal = func(params)
       return returnVal
     })
-    channel.method(name, transferInterceptor)
+    const path = `/agreement/${role}@${version}/${name}`
+    channel.method(path, transferInterceptor)
   })
 }  
 
@@ -124,13 +125,14 @@ export const implement = z.function().args(
   return _implement(channel, agreement, impl, validator)
 })
 
-const clientWrap = (channel, name, route, setHeaders) => {
+const clientWrap = (channel, name, role, version, route, setHeaders) => {
   const transferSchema = z.object({
     headers: (route.header) ? route.header : z.undefined(),
     params: (route.param) ? route.param : z.undefined(),
   })
   const transferInterceptor = z.function().args(transferSchema).implement(async (paramsAndHeaders) => {
-    return channel.request(name, paramsAndHeaders)
+    const path = `/agreement/${role}@${version}/${name}`
+    return channel.request(path, paramsAndHeaders)
   })
 
   const withArgs = (route.param instanceof z.ZodUndefined) ? z.function().args() : z.function().args(route.param) 
@@ -151,7 +153,7 @@ function _proxy (channel, agreement, setHeaders) {
   const { role, version, routes } = agreement
   const api = { _channel: channel }
   Object.keys(routes).forEach(name => {
-    const func = clientWrap(channel, name, routes[name], setHeaders)
+    const func = clientWrap(channel, name, role, version, routes[name], setHeaders)
     api[name] = func
   })
   return api
