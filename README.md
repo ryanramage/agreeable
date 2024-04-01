@@ -9,7 +9,8 @@ Reason
 There is still a need in p2p environments to have services. We want to make it easy to create, use, test, and share
 these services. Agreeable makes spinning up a friendly p2p service easy. 
 
-1. Create The Agreement
+
+1 Create The Agreement
 -----------------------
 
 create your service agreement with an easy to follow format. Here is an example. 
@@ -49,7 +50,7 @@ We use the well established [Zod](https://zod.dev/) schema validation and type i
 We add some light syntactic sugar to allow for params, return types, and headers. Headers can be used to authorize a user, like in web services.
 We wrap everything up into a an api role and version to make sure both parties know what this is for, and when things change.
 
-2. Create The Implementation
+2 Create The Implementation
 ----------------------------
 
 The peer that is going to enact the agreement (create the implementation), will create a file that contains the code that actually runs functions.
@@ -90,7 +91,7 @@ export default impl
 
 As you can see, async functions are available, so one could do heavy processing. Everything else is pretty straightforward. 
 
-3. Serve the agreement and implementation
+3 Serve the agreement and implementation
 -----------------------------------------
 
 This part is pretty easy 
@@ -125,7 +126,7 @@ console.log('listening on:', b4a.toString(keyPair.publicKey, 'hex'))
 
 ```
 
-4. Run the server
+4 Run the server
 -----------------
 
 using bare ```bare index.mjs```
@@ -139,7 +140,7 @@ listening on: 9cdd38e4df5a3a88bb56eff2048021745f29fe96ab934682510384f0ab978607
 grab the key
 
 
-5. Run the agreeable UI to test it
+5 Run the agreeable UI to test it
 -----------------------------------
 
 The source code for agreeable-ui is here : https://github.com/ryanramage/agreeable-ui 
@@ -156,7 +157,7 @@ or just run
 
 pear run pear://qrxbzxyqup1egwjnrmp7fcikk31nekecn43xerq65iq3gjxiaury
 
-6. Use the proxy as a client to the api in code 
+6 Use the proxy as a client to the api in code 
 -----------------------------------------------
 
 Here is an example of running both sides of the agreement over streams. It mostly shows off the clint proxy api that is easy to use. 
