@@ -15,7 +15,7 @@ these services. Agreeable makes spinning up a friendly p2p service easy.
 
 create your service agreement with an easy to follow format. Here is an example. 
 
-file: agreement.js
+file: agreement.mjs
 
 ```
 import { z } from 'zod'
