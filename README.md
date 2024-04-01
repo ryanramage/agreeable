@@ -168,7 +168,7 @@ import Channel from 'jsonrpc-mux'
 import Protomux from 'protomux'
 import SecretStream from '@hyperswarm/secret-stream'
 
-import agreement from './share/agreement.mjs'
+import agreement from './agreement.mjs'
 import { enact, proxy } from 'agreeable'
 
 const a = new Channel(new Protomux(new SecretStream(true)))
