@@ -139,8 +139,10 @@ listening on: 9cdd38e4df5a3a88bb56eff2048021745f29fe96ab934682510384f0ab978607
 grab the key
 
 
-5. Run the agreement UI to test it
+5. Run the agreeable UI to test it
 -----------------------------------
+
+The source code for agreeable-ui is here : https://github.com/ryanramage/agreeable-ui 
 
 We have a swagger like ui tool that will spin up a peer and download the agreement, and give you a nice ui to test and interact with the api.
 
