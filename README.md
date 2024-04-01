@@ -154,4 +154,18 @@ or just run
 
 pear run pear://qrxbzxyqup1egwjnrmp7fcikk31nekecn43xerq65iq3gjxiaury
 
+ROADMAP
+===========
+
+Here are some things or ideas that could happen in this space
+
+ - Simplified api server. Only have to provide the interface, implementation and seed. 
+ - Simple Form collection. One function form submission, which gets stored in a hypercore
+ - Form reader - remotely read the form submissions
+ - Load agreements from a hyperdrive remotely
+ - Registry of agreements - to have service lookups 
+ - Load balancer of implementation, for really compute heavy services 
+ - signed executors 
+ - 2 peer executor verification
+
 
