@@ -154,6 +154,55 @@ or just run
 
 pear run pear://qrxbzxyqup1egwjnrmp7fcikk31nekecn43xerq65iq3gjxiaury
 
+6. Use the proxy as a client to the api in code 
+-----------------------------------------------
+
+Here is an example of running both sides of the agreement over streams. It mostly shows off the clint proxy api that is easy to use. 
+
+```
+'use strict'
+import Channel from 'jsonrpc-mux'
+import Protomux from 'protomux'
+import SecretStream from '@hyperswarm/secret-stream'
+
+import agreement from './share/agreement.mjs'
+import { enact, proxy } from 'agreeable'
+
+const a = new Channel(new Protomux(new SecretStream(true)))
+const b = new Channel(new Protomux(new SecretStream(false)))
+replicate(a, b)
+
+
+const impl = {}
+impl.addTwo = ({a, b}) => a + b
+impl.ping = () => console.log('got pinged, null return', Date.now())
+impl.randomName = () => 'bob'
+impl.wait = async ({ ms }) => {
+  console.log('waiting', ms, 'ms')
+  await wait(ms)
+  console.log('done waiting')
+}
+const validator = async (name, headers, extraInfo) => {
+  console.log(extraInfo.remotePublicKey, 'validating')
+  if (name === 'addTwo' && headers.userId !== 'bob') throw new Error('invalid user')
+}
+enact(a, agreement, impl, validator)
+
+const setHeaders = () => ({  userId: 'bob', authToken: 'test'})
+const client = proxy(b, agreement, setHeaders)
+
+let results = await client.addTwo({ a:4, b:2  })
+console.log('got results', results)
+const name = await client.randomName()
+console.log('random name', name)
+await client.ping()
+await client.wait({ ms: 1000 })
+
+function replicate (a, b) { a.socket.pipe(b.socket).pipe(a.socket) }
+function wait (delay) { return new Promise(resolve => setTimeout(resolve, delay)) }
+
+```
+
 ROADMAP
 ===========
 
