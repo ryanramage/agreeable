@@ -141,7 +141,7 @@ const clientWrap = (channel, name, role, version, route, setHeaders) => {
   const withReturn = (route.return instanceof z.ZodUndefined) ? withArgs : withArgs.returns(z.promise(route.return))
   const func = withReturn.implement(async params => {
     const payload = { }
-    if (params) payload.params = params || {}
+    if (params) payload.params = params
     if (route.header instanceof z.ZodObject) payload.headers = setHeaders()
     const returnVal = transferInterceptor(payload)
 
