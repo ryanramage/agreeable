@@ -1,4 +1,6 @@
 import z from 'zod'
+export { z }
+
 import { zodToJsonSchema } from 'zod-to-json-schema'
 // imports we need that are runtime dependent
 let readFile, fileURLToPath, resolve, dirname, path = null
