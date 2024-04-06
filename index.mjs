@@ -48,7 +48,26 @@ export function params (_param) {
   return info 
 }
 
- function _implement (channel, agreement, impl, validator) {
+export function addRoute (zodFunction) {
+  const info = {
+    return: z.undefined(),
+    header: z.undefined(),
+    headers: () => {}, // just a placeholder so type systems dont complain
+  }
+  const rawArgs = zodFunction._def.args._def.items
+  if (rawArgs.length > 1 ) throw new Error('only one argument is supported for now')
+  if (rawArgs.length === 0) info.param = z.undefined()
+  if (rawArgs.length === 1) info.param = rawArgs[0]
+
+  info.return = zodFunction._def.returns._def.type || z.undefined()
+  info.headers = (headers) => {
+    (headers instanceof z.ZodSchema) ? info.header = headers : info.header = z.object(headers)
+    return info
+  }
+  return info
+}
+
+function _implement (channel, agreement, impl, validator) {
   // need to validate the agreement
   const { role, version, routes } = agreement
   Object.keys(routes).forEach(name => {
