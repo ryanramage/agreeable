@@ -57,8 +57,11 @@ export function addRoute (zodFunction) {
   const rawArgs = zodFunction._def.args._def.items
   if (rawArgs.length > 1 ) throw new Error('only one argument is supported for now')
   if (rawArgs.length === 0) info.param = z.undefined()
-  if (rawArgs.length === 1) info.param = rawArgs[0]
-
+  if (rawArgs.length === 1) {
+    info.param = rawArgs[0]
+    if (info.param.constructor.name !== 'ZodObject') throw new Error('Object is required for the param')
+  }
+  if (zodFunction._def.returns.constructor.name !== 'ZodPromise') throw new Error('Promises have to be returned for routes')
   info.return = zodFunction._def.returns._def.type || z.undefined()
   info.headers = (headers) => {
     (headers instanceof z.ZodSchema) ? info.header = headers : info.header = z.object(headers)
@@ -77,7 +80,7 @@ function _implement (channel, agreement, impl, validator) {
 
     // the implementation
     const withArgs = (route.param instanceof z.ZodUndefined) ? z.function().args() : z.function().args(route.param) 
-    const withReturn = (route.return instanceof z.ZodUndefined) ? withArgs : withArgs.returns(route.return)
+    const withReturn = (route.return instanceof z.ZodUndefined) ? withArgs : withArgs.returns(z.promise(route.return))
     const func = withReturn.implement(implementation)
 
     const transferSchema = z.object({
