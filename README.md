@@ -11,6 +11,8 @@ these services. Agreeable makes spinning up a friendly p2p service easy.
 
 The simplest getting started can be found at [agreeable-peer](https://github.com/ryanramage/agreeable-peer). Please follow those instructions.
 
+For a nice UI to browse and test agreeable-peer services, us [agreeable-ui](https://github.com/ryanramage/agreeable-ui)
+
 
 ROADMAP
 ===========
