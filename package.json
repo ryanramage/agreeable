@@ -1,7 +1,7 @@
 {
-  "name": "agreeable",
+  "name": "@agree-able/contract",
   "version": "1.4.1",
-  "description": "Type friendly agreements between peers for rpc and forms",
+  "description": "Type friendly agreements between peers for rpc",
   "main": "index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,9 +20,9 @@
   "author": "Ryan Ramage",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ryanramage/agreeable/issues"
+    "url": "https://github.com/agree-able/contract/issues"
   },
-  "homepage": "https://github.com/ryanramage/agreeable#readme",
+  "homepage": "https://github.com/agree-able/contract#readme",
   "dependencies": {
     "bare-fs": "^2.2.2",
     "bare-path": "^2.1.0",
